@@ -73,13 +73,17 @@ if __name__ == '__main__':
         data.append(d)
     print(data)
     map = som(data, 500, 0.5, 15, 15, 2)
-    plot_map(map)
+    # plot_map(map)
 
     # change data
-    for i in range(size):
-        if data[i].any() < 0.69420:
-            data[i][0] = 0
-            data[i][1] = 0
+    data = []
+    i = 0
+    while i < size:
+        d = np.array(np.random.uniform(-1, 1, 2))
+        if 1 <= d[0]**2 + d[1]**2 <= 2:
+            data.append([d[0], d[1]])
+            i += 1
     print(data)
+
     map = som(data, 500, 0.5, 15, 15, 2)
     plot_map(map)
