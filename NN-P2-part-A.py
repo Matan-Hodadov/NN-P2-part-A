@@ -77,35 +77,57 @@ def plot_map(map, data):
     plt.show()
 
 
-def part_a_uniform(size):
+def get_data(bottom, upper, lim, size, nu=0, orig=False):
     data = []
-    for i in range(size):
-        d = np.array(np.random.uniform(0, 1, 2))
-        data.append(d)
-    print(data)
+    i = 0
+    while i < size:
+        if nu == 0:
+            d = np.array(np.random.uniform(-lim, lim, 2))
+        elif nu == 1:
+            d = np.array(np.random.standard_normal(2))
+        elif nu == 2:
+            d = np.array(np.random.laplace(np.mean([upper, bottom]), .075, 2))
+            data.append(d)
+            i += 1
+            continue
+        if bottom <= d[0] ** 2 + d[1] ** 2 <= upper:
+            if orig:
+                data.append([d[0], d[1]])
+            else:
+                data.append([d[0]/2+.5, d[1]/2+.5])
+            i += 1
+    return data
+
+
+def part_a_uniform(size, bot, top):
+    lim = 1.5
+    data = get_data(bot, top, lim, size)
+
     map = som(data, 500, 0.5, 3, 5, 2)
-    plt.gca().set(xlim=(-.1, 1.1), ylim=(-.1, 1.1))
+    plt.gca().set(xlim=(-bot-0.1, top+.1), ylim=(-bot-0.1, top+.1))
     plt.title("15 neurons 500 iter")
     plot_map(map, data)
 
     map = som(data, 1000, 0.5, 3, 5, 2)
-    plt.gca().set(xlim=(-.1, 1.1), ylim=(-.1, 1.1))
+    plt.gca().set(xlim=(-bot-0.1, top+.1), ylim=(-bot-0.1, top+.1))
     plt.title("15 neurons 1000 iter")
     plot_map(map, data)
 
     map = som(data, 500, 0.5, 10, 20, 2)
-    plt.gca().set(xlim=(-.1, 1.1), ylim=(-.1, 1.1))
+    plt.gca().set(xlim=(-bot-0.1, top+.1), ylim=(-bot-0.1, top+.1))
     plt.title("200 neurons 500 iter")
     plot_map(map, data)
 
+    map = som(data, 1000, 0.5, 10, 20, 2)
+    plt.gca().set(xlim=(-bot-.1, top+.1), ylim=(-bot-.1, top+.1))
+    plt.title("200 neurons 1000 iter")
+    plot_map(map, data)
 
-def part_a_nonuniform1(size):
+
+def part_a_nonuniform1(size, bot, top):
     # change data
-    data = []
-    for i in range(size):
-        d = np.array(np.random.standard_normal(2))
-        data.append(d)
-    print(data)
+    lim = 1.5
+    data = get_data(bot, top, lim, size, nu=1)
 
     map = som(data, 500, 0.5, 3, 5, 2)
     plt.gca().set(xlim=(-.1, 1.1), ylim=(-.1, 1.1))
@@ -122,13 +144,15 @@ def part_a_nonuniform1(size):
     plt.title("standard normal 200 neurons 500 iter")
     plot_map(map, data)
 
+    map = som(data, 1000, 0.5, 10, 20, 2)
+    plt.gca().set(xlim=(-.1, 1.1), ylim=(-.1, 1.1))
+    plt.title("standard normal 200 neurons 1000 iter")
+    plot_map(map, data)
 
-def part_a_nonuniform2(size):
-    data = []
-    for i in range(size):
-        d = np.array(np.random.laplace(.5, .1, 2))
-        data.append(d)
-    print(data)
+
+def part_a_nonuniform2(size, bot, top):
+    lim = 1.5
+    data = get_data(bot, top, lim, size, nu=2)
 
     map = som(data, 500, 0.5, 3, 5, 2)
     plt.gca().set(xlim=(-.1, 1.1), ylim=(-.1, 1.1))
@@ -145,26 +169,24 @@ def part_a_nonuniform2(size):
     plt.title("laplace 200 neurons 500 iter")
     plot_map(map, data)
 
-
-def part_a_2(size):
-    data = []
-    i = 0
-    lim = 1.5
-    while i < size:
-        d = np.array(np.random.uniform(-lim, lim, 2))
-        if 1 <= d[0] ** 2 + d[1] ** 2 <= 2:
-            data.append([d[0], d[1]])
-            i += 1
-    print(data)
-
-    map = som(data, 500, 0.5, 3, 5, 2, show_prog=True, desc="15 neurons 250 of 500 iter")
-    plt.gca().set(xlim=(-lim, lim), ylim=(-lim, lim))
-    plt.title("15 neurons 500 iter")
+    map = som(data, 1000, 0.5, 10, 20, 2)
+    plt.gca().set(xlim=(-.1, 1.1), ylim=(-.1, 1.1))
+    plt.title("laplace 200 neurons 1000 iter")
     plot_map(map, data)
 
-    map = som(data, 1000, 0.5, 3, 5, 2)
+
+def part_a_2(size, bot, top):
+    lim = 1.5
+    data = get_data(bot, top, lim, size, orig=True)
+
+    map = som(data, 500, 0.5, 5, 6, 2, show_prog=True, desc="30 neurons 250 of 500 iter")
     plt.gca().set(xlim=(-lim, lim), ylim=(-lim, lim))
-    plt.title("15 neurons 1000 iter")
+    plt.title("30 neurons 500 iter")
+    plot_map(map, data)
+
+    map = som(data, 1000, 0.5, 5, 6, 2)
+    plt.gca().set(xlim=(-lim, lim), ylim=(-lim, lim))
+    plt.title("30 neurons 1000 iter")
     plot_map(map, data)
 
     map = som(data, 500, 0.5, 10, 20, 2)
@@ -172,10 +194,15 @@ def part_a_2(size):
     plt.title("200 neurons 500 iter")
     plot_map(map, data)
 
+    map = som(data, 1000, 0.5, 10, 20, 2)
+    plt.gca().set(xlim=(-lim, lim), ylim=(-lim, lim))
+    plt.title("200 neurons 1000 iter")
+    plot_map(map, data)
+
 
 if __name__ == '__main__':
     size = 1000
-    # part_a_uniform(size)
-    # part_a_nonuniform1(size)
-    # part_a_nonuniform2(size)
-    # part_a_2(size)
+    part_a_uniform(size, 0, 1)
+    part_a_nonuniform1(size, 0, 1)
+    part_a_nonuniform2(size, 0, 1)
+    part_a_2(size, 1, 2)
