@@ -146,15 +146,7 @@ def part_a_nonuniform2(size):
     plot_map(map, data)
 
 
-if __name__ == '__main__':
-    size = 1000
-    # PART A #
-    # part_a_uniform(size)
-    # part_a_nonuniform1(size)
-    # part_a_nonuniform2(size)
-
-    # PART B #
-    # change data
+def part_a_2(size):
     data = []
     i = 0
     lim = 1.5
@@ -179,3 +171,11 @@ if __name__ == '__main__':
     plt.gca().set(xlim=(-lim, lim), ylim=(-lim, lim))
     plt.title("200 neurons 500 iter")
     plot_map(map, data)
+
+
+if __name__ == '__main__':
+    size = 1000
+    # part_a_uniform(size)
+    # part_a_nonuniform1(size)
+    # part_a_nonuniform2(size)
+    # part_a_2(size)
